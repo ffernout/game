@@ -86,13 +86,12 @@ class Warrior(Hero):
         print(f'Warrior {self.name} hit critically {crit} to boss.')
 
 
-class Magic(Hero):
+class Magic_1(Hero):
     def __init__(self, name, health, damage):
         super().__init__(name, health, damage, 'BOOST')
 
     def apply_super_power(self, boss, heroes):
         pass
-        # TODO Here will be implementation of BOOSTING
 
 
 class Berserk(Hero):
@@ -123,6 +122,50 @@ class Medic(Hero):
             if hero.health > 0 and self != hero:
                 hero.health += self.__heal_points
 
+#Создаем класса Ведьмака
+class Witcher(Hero):
+    def __init__(self, name, health, damage):
+        super().__init__(name, health, damage, "REVIVE")
+
+    def apply_super_power(self, boss, heroes):
+        # if randint(1, 5) == 1:
+            dead_hero = next((hero for hero in heroes if hero.health <= 0), None)
+            if dead_hero:
+                dead_hero.health = dead_hero.health + self.health
+                self.health = 0
+                print(f"Witcher {self.name} brings an ally back to life.")
+            else:
+                return
+
+#Создаем класса Мага
+class Magic_2(Hero):
+    def __init__(self, name, health, damage):
+        super().__init__(name, health, damage, "Damage increased")
+        self.attack_increased = 2
+
+    def apply_super_power(self, boss, heroes):
+        for hero in heroes:
+            if hero.health > 0:
+                hero.damage += self.attack_increased
+                print(
+                    f"Magic {self.name} damage increased {hero.name}'s attack by {self.attack_increased}. New damage: {hero.damage}")
+
+#Создание класса Хакер
+
+class Hacker(Hero):
+    def __init__(self, name, health, damage, steal_amount):
+        super().__init__(name, health, damage, "steal amount")
+        self.steal_amount = steal_amount
+
+    def apply_super_power(self, boss, heroes):
+        if boss.health > 0:
+            boss.health -= self.steal_amount
+            if heroes:
+                hero = choice([hero for hero in heroes if hero.health > 0])
+                hero.health += self.steal_amount
+                print(f"Hacker {self.name} steals {self.steal_amount} health from the boss and gives it to {hero.name}.")
+            else:
+                return
 
 round_number = 0
 
@@ -162,14 +205,18 @@ def is_game_over(boss, heroes):
 
 
 def start_game():
-    boss = Boss(name='Dragon', health=1000, damage=50)
+    hacker = Hacker(name="Kevin", health=280, damage=10, steal_amount=5)
+    magic_2 = Magic_2(name="Meliodas", health=230, damage=5)
+    witcher = Witcher(name="Geralt", health=300, damage=0)
+    boss = Boss(name='Dragon', health=1500, damage=50)
     warrior_1 = Warrior(name='Mario', health=270, damage=10)
     warrior_2 = Warrior(name='Ben', health=280, damage=15)
-    magic = Magic(name='Merlin', health=290, damage=10)
+    magic_1 = Magic_1(name='Merlin', health=290, damage=10)
     berserk = Berserk(name='Guts', health=260, damage=5)
     doc = Medic(name='Aibolit', health=250, damage=5, heal_points=15)
     assistant = Medic(name='Kristin', health=300, damage=5, heal_points=5)
-    heroes_list = [warrior_1, doc, warrior_2, magic, berserk, assistant]
+
+    heroes_list = [warrior_1, doc, warrior_2, magic_1, berserk, assistant, witcher, magic_2, hacker]
 
     show_statistics(boss, heroes_list)
     while not is_game_over(boss, heroes_list):
