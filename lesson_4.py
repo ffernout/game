@@ -122,7 +122,7 @@ class Medic(Hero):
             if hero.health > 0 and self != hero:
                 hero.health += self.__heal_points
 
-#Создаем класса Ведьмака
+#Создаем класс Ведьмака
 class Witcher(Hero):
     def __init__(self, name, health, damage):
         super().__init__(name, health, damage, "REVIVE")
@@ -137,7 +137,7 @@ class Witcher(Hero):
             else:
                 return
 
-#Создаем класса Мага
+#Создание класс Мага
 class Magic_2(Hero):
     def __init__(self, name, health, damage):
         super().__init__(name, health, damage, "Damage increased")
@@ -150,8 +150,7 @@ class Magic_2(Hero):
                 print(
                     f"Magic {self.name} damage increased {hero.name}'s attack by {self.attack_increased}. New damage: {hero.damage}")
 
-#Создание класса Хакер
-
+#Создание класс Хакер
 class Hacker(Hero):
     def __init__(self, name, health, damage, steal_amount):
         super().__init__(name, health, damage, "steal amount")
